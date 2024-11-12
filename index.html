@@ -1,83 +1,69 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Alta Disponibilidad (HA)</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f7f7f7;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
-    .container {
-      max-width: 800px;
-      margin: 50px auto;
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      padding: 20px;
-    }
-    h1 {
-      color: #4a90e2;
-      text-align: center;
-      font-size: 2.5em;
-    }
-    h2 {
-      color: #333;
-      font-size: 1.5em;
-      margin-top: 20px;
-    }
-    p {
-      line-height: 1.6;
-      font-size: 1em;
-      color: #666;
-    }
-    ul {
-      padding-left: 20px;
-    }
-    .highlight {
-      color: #4a90e2;
-      font-weight: bold;
-    }
-    .example {
-      background-color: #f0f7ff;
-      padding: 10px;
-      border-left: 4px solid #4a90e2;
-      margin-top: 20px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feature Flags con Funciones</title>
+    <style>
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>¿Qué es la Alta Disponibilidad (HA)?</h1>
-    <p>
-      La <span class="highlight">Alta Disponibilidad (HA)</span> es una característica de los sistemas informáticos que garantiza un tiempo de actividad elevado y minimiza las interrupciones del servicio. HA es fundamental en sistemas críticos que necesitan estar siempre operativos.
-    </p>
-    
-    <h2>¿Por qué es importante?</h2>
-    <p>
-      En sectores como el financiero, salud o telecomunicaciones, el tiempo de inactividad puede tener consecuencias graves. HA asegura que los servicios están disponibles casi de forma continua, incluso en caso de fallos de hardware, red o software.
-    </p>
+    <h1>Ejemplo de Feature Flags</h1>
+    <label for="feature-toggle">Activar nueva funcionalidad</label>
+    <input type="checkbox" id="feature-toggle">
 
-    <h2>Principios de HA</h2>
-    <ul>
-      <li><span class="highlight">Redundancia</span>: Se duplican componentes para que, si uno falla, el otro tome el control.</li>
-      <li><span class="highlight">Balanceo de carga</span>: Distribuye las tareas entre múltiples servidores para evitar sobrecargas.</li>
-      <li><span class="highlight">Conmutación por error</span>: Cuando un servidor falla, otro asume sus funciones automáticamente.</li>
-    </ul>
-
-    <h2>Ejemplo de Configuración HA</h2>
-    <div class="example">
-      <p>
-        En una configuración simple, tenemos un sistema <strong>master-slave</strong>, donde el <strong>nodo master</strong> maneja el tráfico y el <strong>nodo slave</strong> toma el control si el master falla. Este proceso de transferencia de tareas entre nodos es la <span class="highlight">conmutación por error</span>.
-      </p>
-      <p>
-        Ambos nodos comparten una <strong>IP virtual</strong>, que siempre apunta al nodo activo. Cuando el nodo master se detiene, el slave asume la IP virtual, asegurando que el servicio sigue disponible.
-      </p>
+    <div id="old-feature">
+        <h2>Funcionalidad Vieja</h2>
+        <p>Esta es la funcionalidad vieja que siempre está activa.</p>
     </div>
-  </div>
+
+    <div id="new-feature" class="hidden">
+        <h2>Funcionalidad Nueva</h2>
+        <p>Esta es la nueva funcionalidad que se puede activar o desactivar.</p>
+    </div>
+
+    <script>
+        // Función vieja
+        function oldFunction() {
+            console.log("Funcionalidad vieja activada");
+        }
+
+        // Función nueva
+        function newFunction() {
+            console.log("Funcionalidad nueva activada");
+        }
+
+        // Inicializar la feature flag
+        let featureFlag = false;
+
+        // Obtener elementos del DOM
+        const featureToggle = document.getElementById('feature-toggle');
+        const newFeatureSection = document.getElementById('new-feature');
+
+        // Función para actualizar la visibilidad de la nueva funcionalidad
+        function updateFeatureVisibility() {
+            if (featureFlag) {
+                newFeatureSection.classList.remove('hidden');
+                newFunction();
+            } else {
+                newFeatureSection.classList.add('hidden');
+            }
+        }
+
+        // Evento para el checkbox de toggle
+        featureToggle.addEventListener('change', () => {
+            featureFlag = featureToggle.checked;
+            updateFeatureVisibility();
+        });
+
+        // Ejecutar la función vieja siempre
+        oldFunction();
+
+        // Actualizar la visibilidad inicial
+        updateFeatureVisibility();
+    </script>
 </body>
 </html>
